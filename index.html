@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#18181b">
+  <title>GIS-PWA-Test</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <style>
+    :root { color-scheme: light dark; --bg: #ffffff; --fg: #18181b; --muted: #71717a; --border: #e4e4e7; --accent: #be185d; --ok: #15803d; --bad: #b91c1c; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #09090b; --fg: #fafafa; --muted: #a1a1aa; --border: #2e2e33; --accent: #f472b6; --ok: #4ade80; --bad: #f87171; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.45 system-ui, sans-serif; }
+    main { max-width: 520px; margin: 0 auto; padding: 16px 16px 48px; display: flex; flex-direction: column; gap: 14px; }
+    h1 { font-size: 20px; margin: 0; }
+    .muted { color: var(--muted); font-size: 13px; }
+    fieldset { border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    legend { font-weight: 700; padding: 0 4px; }
+    label { font-size: 13px; font-weight: 600; }
+    input[type=text], input[type=email] { font: inherit; width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--fg); }
+    button { font: inherit; font-weight: 600; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--fg); cursor: pointer; text-align: left; }
+    button.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+    .status { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 13px; }
+    .status b { font-weight: 600; }
+    #log { list-style: none; padding: 0; margin: 0; font: 12px/1.4 ui-monospace, monospace; display: flex; flex-direction: column; gap: 6px; }
+    #log li { border-left: 3px solid var(--border); padding-left: 8px; word-break: break-word; }
+    #log li.err { border-color: var(--bad); }
+    #log li.ok { border-color: var(--ok); }
+    textarea { width: 100%; height: 120px; font: 11px ui-monospace, monospace; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>GIS-PWA-Test</h1>
+  <p class="muted">Wegwerf-Test: Funktioniert die Google-Freigabe (GIS-Tokenmodell) in einer installierten PWA auf Android? Checkliste im README des Repos. Das Protokoll unten bleibt über App-Neustarts erhalten.</p>
+
+  <fieldset>
+    <legend>Einstellungen</legend>
+    <label for="clientId">OAuth-Client-ID</label>
+    <input id="clientId" type="text" autocomplete="off" placeholder="…apps.googleusercontent.com">
+    <label for="hint">Google-Konto (für login_hint)</label>
+    <input id="hint" type="email" autocomplete="email" placeholder="name@gmail.com">
+    <label><input id="auto" type="checkbox"> Beim Start ohne Tipp anfordern</label>
+    <button id="save">Speichern und Client neu initialisieren</button>
+  </fieldset>
+
+  <div class="status" id="status"></div>
+
+  <fieldset>
+    <legend>Freigabe</legend>
+    <button id="consent" class="primary">1. Freigabe anfordern (prompt: consent)</button>
+    <button id="silent">2. Erneut anfordern (prompt leer + login_hint)</button>
+    <button id="delayed">3. In 10 Sekunden anfordern (ohne frische Nutzergeste)</button>
+  </fieldset>
+
+  <fieldset>
+    <legend>Drive (appDataFolder)</legend>
+    <button id="upload">Testdatei hochladen</button>
+    <button id="list">Dateien auflisten</button>
+  </fieldset>
+
+  <fieldset>
+    <legend>Speicher</legend>
+    <button id="persist">navigator.storage.persist() anfordern</button>
+  </fieldset>
+
+  <fieldset>
+    <legend>Protokoll</legend>
+    <button id="copy">Protokoll kopieren</button>
+    <button id="clear">Protokoll leeren</button>
+    <textarea id="copyArea" hidden readonly></textarea>
+    <ol id="log"></ol>
+  </fieldset>
+</main>
+<script src="app.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="gisLoaded()" onerror="gisFailed()"></script>
+</body>
+</html>
