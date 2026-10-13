@@ -12,7 +12,7 @@ Die Seite speichert Client-ID, Google-Konto und ein Protokoll nur im Browser des
 2. **APIs und Dienste → Bibliothek:** „Google Drive API“ aktivieren.
 3. **Google Auth Platform → Branding / Zielgruppe:** Nutzertyp „Extern“, App-Name „Zeiterfassung“, Support- und Entwickler-E-Mail eintragen.
 4. **Datenzugriff:** den Scope `https://www.googleapis.com/auth/drive.appdata` hinzufügen.
-5. **Zielgruppe:** Veröffentlichungsstatus auf **„In Produktion“** setzen. Notieren: Ging das ohne Startseite, Datenschutz-Link und Domainbestätigung? Verlangt Google eine Überprüfung?
+5. **Zielgruppe:** Veröffentlichungsstatus auf **„Test“** lassen und unter **Testnutzer** das eigene Google-Konto hinzufügen. (Ergebnis vom 13.10.2026: „In Produktion“ verlangt App-Name, Support-E-Mail sowie URLs für Startseite und Datenschutzerklärung; für diesen Test ist das nicht nötig. Beim Anmelden erscheint „Google hat diese App nicht überprüft“, dort auf „Weiter“ tippen.)
 6. **Clients → Client erstellen:** Typ „Webanwendung“, autorisierter JavaScript-Ursprung `https://felixsab.github.io`. Weiterleitungs-URIs leer lassen. Die **Client-ID** kopieren (kein Secret nötig).
 
 ## Teil 2: Handy (Android, Chrome)
