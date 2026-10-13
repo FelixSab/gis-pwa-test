@@ -19,7 +19,7 @@ Die Seite speichert Client-ID, Google-Konto und ein Protokoll nur im Browser des
 
 Nach jedem Schritt steht das Ergebnis im Protokoll der Seite. Was auf dem Bildschirm passiert, bitte kurz mitschreiben.
 
-1. Die Seite in Chrome öffnen. Client-ID und dein Google-Konto eintragen, **Speichern**.
+1. Die Seite in Chrome öffnen. Die Client-ID ist schon vorbelegt; nur dein Google-Konto eintragen und **Speichern**.
 2. Im normalen Browser-Tab: **1. Freigabe anfordern**, Konto wählen und zustimmen. Dann **Testdatei hochladen** und **Dateien auflisten**. Erwartet: „Token erhalten“, Upload HTTP 200.
 3. Chrome-Menü → **App installieren** (oder „Zum Startbildschirm hinzufügen“). Notieren: Hieß der Eintrag „Installieren“ (echte App) oder nur „Verknüpfung“?
 4. Die App **vom Startbildschirm** öffnen. Im Protokoll steht `[standalone]`. **1. Freigabe anfordern**: Öffnet sich ein Fenster (Custom Tab)? Kommst du nach der Anmeldung automatisch in die App zurück? Steht „Token erhalten“ im Protokoll?

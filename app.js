@@ -1,9 +1,15 @@
 "use strict";
 
-const VERSION = "1";
+const VERSION = "2";
+const DEFAULT_CLIENT_ID = "124960225219-osjbpd1vbqvt66vph755v9kcsp15lf0v.apps.googleusercontent.com";
 const SCOPE = "https://www.googleapis.com/auth/drive.appdata";
 const LOG_KEY = "gis-test-log";
 const SETTINGS_KEY = "gis-test-settings";
+
+function settings() {
+  const stored = readJson(SETTINGS_KEY, {});
+  return { ...stored, clientId: stored.clientId || DEFAULT_CLIENT_ID };
+}
 
 const $ = (id) => document.getElementById(id);
 let tokenClient = null;
@@ -59,12 +65,12 @@ function renderLog() {
 }
 
 function renderStatus() {
-  const settings = readJson(SETTINGS_KEY, {});
+  const current = settings();
   const rows = [
     ["Version", VERSION],
     ["Anzeigemodus", displayMode()],
     ["Online", String(navigator.onLine)],
-    ["Client-ID", settings.clientId ? "gesetzt" : "fehlt"],
+    ["Client-ID", current.clientId === DEFAULT_CLIENT_ID ? "Vorgabe" : "eigene"],
     ["GIS geladen", String(Boolean(window.google?.accounts?.oauth2))],
     ["Token", token ? `gültig bis ${new Date(expiresAt).toLocaleTimeString("de-DE")}` : "keins"],
   ];
@@ -80,7 +86,7 @@ function renderStatus() {
 }
 
 function initClient() {
-  const { clientId } = readJson(SETTINGS_KEY, {});
+  const { clientId } = settings();
   if (!clientId) {
     log("Keine Client-ID gesetzt", null, "err");
     return false;
@@ -127,7 +133,7 @@ function request(label, overrides) {
 }
 
 function silentOverrides() {
-  const { hint } = readJson(SETTINGS_KEY, {});
+  const { hint } = settings();
   return hint ? { prompt: "", login_hint: hint } : { prompt: "" };
 }
 
@@ -179,17 +185,17 @@ async function copyLog() {
 }
 
 function loadSettingsIntoForm() {
-  const settings = readJson(SETTINGS_KEY, {});
-  $("clientId").value = settings.clientId ?? "";
-  $("hint").value = settings.hint ?? "";
-  $("auto").checked = Boolean(settings.auto);
+  const current = settings();
+  $("clientId").value = current.clientId;
+  $("hint").value = current.hint ?? "";
+  $("auto").checked = Boolean(current.auto);
 }
 
 window.gisLoaded = () => {
   log("GIS-Skript geladen");
   renderStatus();
   if (!initClient()) return;
-  if (readJson(SETTINGS_KEY, {}).auto) request("automatisch beim Start (ohne Tipp)", silentOverrides());
+  if (settings().auto) request("automatisch beim Start (ohne Tipp)", silentOverrides());
 };
 
 window.gisFailed = () => {
